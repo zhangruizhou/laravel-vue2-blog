@@ -1,2 +1,5 @@
 build/*.js
 config/*.js
+src/components/front/article/*.vue
+/src/components/admin/common/*.vue
+/src/components/admin/*.vue

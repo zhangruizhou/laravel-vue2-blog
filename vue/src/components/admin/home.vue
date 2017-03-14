@@ -1,38 +1,19 @@
 <template>
-  <div class="home">
-    <h1>{{ msg }}</h1>
-    <h2>home</h2>
+  <div class="wrapper">
+    <v-head></v-head>
+    <v-sidebar></v-sidebar>
+    <div class="content">
+      <transition name="move" mode="out-in"><router-view></router-view></transition>
+    </div>
   </div>
 </template>
 
 <script>
+  import vHead from './common/header.vue';
+  import vSidebar from './common/sidebar.vue';
   export default {
-    name: 'home',
-    data () {
-      return {
-        msg: 'Welcome to admin Home'
-      }
+    components:{
+      vHead, vSidebar
     }
   }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  h1, h2 {
-    font-weight: normal;
-  }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-
-  a {
-    color: #42b983;
-  }
-</style>
