@@ -7,13 +7,22 @@ const Home = resolve => {
   })
 }
 
-const routers = [{
+const routers = {
   path: '/admin',
-  name: 'home',
-  component: Home
-},{
-  path: '/admin/login',
-  name: 'login',
-  component: Home
-}]
+    component: resolve => require(['../components/admin/home.vue'], resolve),
+  children: [
+  {
+    path: 'login',
+    component: resolve => require(['../components/admin/login.vue'], resolve)
+  },
+  {
+    path: 'login',
+    component: resolve => require(['../components/admin/login.vue'], resolve)
+  },
+  {
+    path: 'articles',
+    component: resolve => require(['../components/admin/article/index'], resolve)
+  }
+]
+}
 export default routers

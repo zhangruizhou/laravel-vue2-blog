@@ -26,10 +26,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
-    $api->get('articles', function () {
+    $api->get('articles', function ($api) {
         return ['status_code' => 1 , 'data'=>[['id'=>1,'title'=>'first'],['id'=>2,'title'=>'second']]];
     });
-    $api->post('admin/login', function () {
-        return ['status_code' => 1 , 'data'=>[['token'=>'sadnaskdaksdkas']]];
+    $api->post('admin/login', function ($api) {
+        return ['status_code' => 1 , 'data'=>['1232']];
+    });
+
+    $api->group(['namespace'=>'App\Api\Controllers\Admin', 'prefix'=>'admin'], function ($api) {
+        $api->get('articles', 'ArticleController@index')->name('articles');
     });
 });

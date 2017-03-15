@@ -1,16 +1,14 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: zhangruizhou
+ * Date: 2017/3/15
+ * Time: 下午2:32
+ */
+namespace App\Repositories;
 
-namespace App\Http\Controllers;
-
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-
-class Controller extends BaseController
+class BaseRepository
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
     /**
      * @param $status
      * @param $message
