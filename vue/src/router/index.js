@@ -23,15 +23,11 @@ export default new Router({
     },
     {
       path: '/admin',
-      component: resolve => require(['../components/admin/home.vue'], resolve),
+      component: resolve => require(['../components/admin/home'], resolve),
       children: [
         {
           path: 'login',
-          component: resolve => require(['../components/admin/login.vue'], resolve)
-        },
-        {
-          path: 'login',
-          component: resolve => require(['../components/admin/login.vue'], resolve)
+          component: resolve => require(['../components/admin/login'], resolve)
         },
         {
           path: 'article',
@@ -39,6 +35,10 @@ export default new Router({
         },
         {
           path: 'article/add',
+          component: resolve => require(['../components/admin/article/detail'], resolve)
+        },
+        {
+          path: 'article/:id/edit',
           component: resolve => require(['../components/admin/article/detail'], resolve)
         }
       ]

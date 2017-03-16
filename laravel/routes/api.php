@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 
 @header("Access-Control-Allow-Origin: *");
 @header("Access-Control-Allow-Credentials: true");
-@header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+@header("Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE");
 @header("Access-Control-Allow-Headers: DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,token");
 
 /*
@@ -34,6 +34,9 @@ $api->version('v1', function ($api) {
     });
 
     $api->group(['namespace'=>'App\Api\Controllers\Admin', 'prefix'=>'admin'], function ($api) {
-        $api->get('articles', 'ArticleController@index')->name('articles');
+        $api->get('article', 'ArticleController@index')->name('article');
+        $api->get('article/{id}', 'ArticleController@detail');
+        $api->post('article', 'ArticleController@store');
+        $api->delete('article/{id}', 'ArticleController@delete');
     });
 });

@@ -7,7 +7,7 @@
                     {{username}}
                 </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="loginout">退出</el-dropdown-item>
+          <el-dropdown-item command="logout">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -28,13 +28,14 @@
     },
     methods:{
       handleCommand(command) {
-        if(command == 'loginout'){
+        if(command == 'logout'){
           localStorage.removeItem('ms_username')
           this.$router.push('/admin/login');
         }
       }
     }
   }
+  global.BACKENDAPIURL = APIURL + 'admin/'
 </script>
 <style>
   @import "/static/css/main.css";

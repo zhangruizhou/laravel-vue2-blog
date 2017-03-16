@@ -8,24 +8,40 @@
 namespace App\Repositories;
 
 use App\Models\ArticleModel;
+use App\Models\CategoryModel;
 use Illuminate\Database\QueryException;
 
 class ArticleRepository extends BaseRepository
 {
-    private $articleModel;
+    public $articleModel;
+    public $categoryModel;
 
     public function __construct(
-        ArticleModel $articleModel
+        ArticleModel $articleModel,
+        CategoryModel $categoryModel
     )
     {
         $this->articleModel = $articleModel;
+        $this->categoryModel = $categoryModel;
     }
 
     public function getList($where, $fields=['*'], $page, $pagesize, $orderBy){
-
         $articles['count'] = $this->articleModel->countBy($where);
-        $articles['list']  = $this->articleModel->lists($fields, $where, $orderBy, [], $pagesize, $page);
+        $articles['list']  = $this->getListCategory($this->articleModel->lists($fields, $where, $orderBy, [], $pagesize, $page));
         return $articles;
+    }
+
+    protected function getListCategory($articleList){
+        if (empty($articleList)) {
+            return $articleList;
+        }
+        foreach ($articleList as $key => $article) {
+            if (!isset($category[$article['category_id']])) {
+                $category[$article['category_id']] = $this->categoryModel->where(['id' => $article['category_id']])->first();
+            }
+            $articleList[$key]['category_name'] = $category[$article['category_id']]['name'];
+        }
+        return $articleList;
     }
 
     /**
@@ -34,8 +50,8 @@ class ArticleRepository extends BaseRepository
      */
     public function create(array $data){
         try {
-            $articleId = $this->articleModel->saveBy($data);
-            return $articleId;
+            $article = $this->articleModel->create($data);
+            return $article->id;
         } catch (QueryException $e) {
             return 0;
         }
@@ -48,7 +64,8 @@ class ArticleRepository extends BaseRepository
      */
     public function update(array $where, array $data){
         try {
-            return $this->articleModel->updateBy($data, $where);
+            //return $this->articleModel->updateBy($data, $where);
+            return $this->articleModel->where($where)->update($data);
         } catch (QueryException $e) {
             return false;
         }

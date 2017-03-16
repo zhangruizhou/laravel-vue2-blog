@@ -13,6 +13,8 @@ Vue.use(VueResource)
 
 Vue.use(ElementUI)
 
+global.APIURL = 'http://www.zhangruizhou.com/api/'
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

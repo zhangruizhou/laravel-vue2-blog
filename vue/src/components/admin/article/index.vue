@@ -8,18 +8,21 @@
     </div>
 
     <el-table :data="articles" border style="width: 100%">
+      <el-table-column prop="id" label="序号" width="120">
+      </el-table-column>
       <el-table-column prop="title" label="标题" width="200">
       </el-table-column>
       <el-table-column prop="author" label="作者" width="120">
       </el-table-column>
-      <el-table-column prop="category" label="分类" width="120">
+      <el-table-column prop="category_name" label="分类" width="120">
       </el-table-column>
-      <el-table-column prop="created_at" label="日期" width="240">
+      <el-table-column prop="created_at" label="日期" width="220">
       </el-table-column>
       <el-table-column label="操作" width="180">
         <template scope="scope">
           <el-button size="small"
-                     @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                     @click="handleEdit(scope.$index, scope.row)">编辑
+          </el-button>
           <el-button size="small" type="danger"
                      @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
@@ -41,17 +44,16 @@
         articles: []
       }
     },
-    created() {
-      const apiUrl = 'http://www.zhangruizhou.com/api/admin'
-      this.$http.get(apiUrl+'/articles').then((response) => {
-        response = response.body
-        if (response.status === 1) {
-          this.articles = response.data.list;
-          console.log("ok")
-        }
-      })
-    },
     methods: {
+      getArticles(){
+        this.$http.get(BACKENDAPIURL +'article').then((response) => {
+          response = response.body
+          if (response.status === 1) {
+            this.articles = response.data.list;
+            console.log("ok")
+          }
+        })
+      },
       formatter(row, column) {
         return row.address;
       },
@@ -59,11 +61,27 @@
         return row.tag === value;
       },
       handleEdit(index, row) {
-        this.$message('编辑第'+(index+1)+'行');
+        this.$router.push('article/'+row.id+'/edit');
       },
       handleDelete(index, row) {
-        this.$message.error('删除第'+(index+1)+'行');
+          this.$confirm('确认删除该记录吗?', '提示', {
+            type: 'warning'
+          }).then(()=>{
+            this.$http.delete(BACKENDAPIURL + 'article/'+row.id).then((response) => {
+              if (response.body.status == 1) {
+                this.$message.success('删除成功！');
+                this.getArticles();
+              } else {
+                this.$message.error(response.body.message);
+              }
+            })
+          }).catch(() => {
+
+          });
       }
+    },
+    mounted() {
+      this.getArticles();
     }
   }
 </script>
