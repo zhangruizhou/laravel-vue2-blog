@@ -62,7 +62,13 @@ return [
             'region' => env('AWS_REGION'),
             'bucket' => env('AWS_BUCKET'),
         ],
-
+        'qiniu' => [
+            'driver' => 'qiniu',
+            'domain' => 'omy5cc3ne.bkt.clouddn.com',   //你的七牛域名
+            'access_key' => '4PvK_FViRuTl3UBI0i_Jw_HpQ7g-CmuAc-wG6git',  //AccessKey
+            'secret_key' => 'oHMixuEjXMgHNADTkx_rhwLcowwEosp9gzJCN1tt',  //SecretKey
+            'bucket' => 'zhngruizhou',  //Bucket名字
+        ],
     ],
 
 ];

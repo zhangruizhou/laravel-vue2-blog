@@ -1,9 +1,9 @@
 <template>
-  <div class="detail">
+  <div>
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item><i class="el-icon-document"></i> 文章管理</el-breadcrumb-item>
-        <el-breadcrumb-item>添加/修改文章</el-breadcrumb-item>
+        <el-breadcrumb-item>添加文章</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="form-box">
@@ -84,26 +84,50 @@
       })
     },
     methods: {
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            const postData = this.ruleForm;
+            this.$http.post(BACKENDAPIURL+'article', postData).then((response) => {
+              response = response.body
+              if (response.status == 1) {
+                this.$message.success('提交成功！');
+                this.$message({
+                  message: '提交成功！',
+                  type: 'success',
+                  onClose: function () {
+                    const url = '#/admin/article';
+                    location = url;
+                  }
+                });
+              } else {
+                this.$message.error(response.message);
+              }
+            }, (response)=>{
+              this.$message.error(response.body.message);
+            })
+          } else {
+            return false;
+          }
+        });
+      },
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
       getArticle(){
-          const id = parseInt(this.$route.params.id);
-          if(id > 0) {
-            this.$http.get(BACKENDAPIURL + 'article/' + this.$route.params.id).then((response) => {
-              response = response.body
-              if (response.status === 1) {
-                this.ruleForm = response.data.article;
-              }
-            });
-          }
+        const id = parseInt(this.$route.params.id);
+        if(id > 0) {
+          this.$http.get(BACKENDAPIURL + 'article/' + this.$route.params.id).then((response) => {
+            response = response.body
+            if (response.status === 1) {
+              this.ruleForm = response.data.article;
+            }
+          });
+        }
       }
     },
     components: {
       markdownEditor
-    },
-    mounted(){
-        this.getArticle();
     }
   }
 </script>

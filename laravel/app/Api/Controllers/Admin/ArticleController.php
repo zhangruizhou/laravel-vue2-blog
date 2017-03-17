@@ -34,8 +34,8 @@ class ArticleController extends AdminController {
 
     public function detail($id){
         $article = $this->articleRepository->articleModel->where(['id'=>$id])->first();
-        $category = $this->articleRepository->categoryModel->alls(['id','name'],['status'=>1]);
-        return $this->getSuccess('success', ['article'=>$article,'category'=>$category]);
+        $article['category_id'] = (string) $article->category_id;
+        return $this->getSuccess('success', ['article'=>$article]);
     }
 
     public function store(Request $request){
@@ -57,8 +57,20 @@ class ArticleController extends AdminController {
         return $articleId > 0 ? $this->getSuccess('success',['id'=>$articleId]) : $this->getError('添加文章失败，请稍后再试');
     }
 
-    public function update(){
-
+    public function update($id){
+        $rules = [
+            'title' => 'required',
+            'intro' => 'required',
+            'content' => 'required',
+        ];
+        $data = app('request')->only('title','cover','category_id','intro','content');
+        $validator = Validator::make($data, $rules);
+        if ($validator->fails()) {
+            return $this->getError($validator->errors()->first());
+        }
+        $data['cover'] = 'a.jpg';
+        $res = $this->articleRepository->update(['id'=>$id], $data);
+        return $res ? $this->getSuccess('success', []) : $this->getError('删除失败！');
     }
 
     public function delete($id){

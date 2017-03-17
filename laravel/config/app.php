@@ -179,7 +179,7 @@ return [
 
         Dingo\Api\Provider\LaravelServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
-
+        itbdw\QiniuStorage\QiniuFilesystemServiceProvider::class
     ],
 
     /*

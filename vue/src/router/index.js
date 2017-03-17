@@ -35,11 +35,11 @@ export default new Router({
         },
         {
           path: 'article/add',
-          component: resolve => require(['../components/admin/article/detail'], resolve)
+          component: resolve => require(['../components/admin/article/add'], resolve)
         },
         {
           path: 'article/:id/edit',
-          component: resolve => require(['../components/admin/article/detail'], resolve)
+          component: resolve => require(['../components/admin/article/edit'], resolve)
         }
       ]
     }
