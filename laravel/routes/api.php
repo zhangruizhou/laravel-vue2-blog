@@ -41,6 +41,5 @@ $api->version('v1', function ($api) {
         $api->delete('article/{id}', 'ArticleController@delete');
         $api->get('category', 'CategoryController@index')->name('category');
         $api->post('upload', 'UploadController@image');
-
     });
 });
