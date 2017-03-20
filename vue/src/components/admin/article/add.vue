@@ -14,7 +14,10 @@
         <el-form-item label="封面图片" prop="cover">
           <el-upload
             class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            name="photo"
+            :action="actionUrl"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
             :show-file-list="false">
             <img v-if="imageUrl" :src="imageUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -73,6 +76,7 @@
         category:[],
         imageUrl: '',
         labelPosition: 'left',
+        actionUrl: BACKENDAPIURL + 'upload',
       }
     },
     created() {
@@ -124,6 +128,20 @@
             }
           });
         }
+      },
+      handleAvatarSuccess(response, file) {
+        if (response.status == 1) {
+          this.imageUrl = response.data.photo_url;
+        } else {
+          this.$message.error(response.message);
+        }
+      },
+      beforeAvatarUpload(file) {
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isLt2M;
       }
     },
     components: {
