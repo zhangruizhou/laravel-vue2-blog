@@ -64,7 +64,10 @@
             { required: true, message: '请输入标题', trigger: 'blur' }
           ],
           category_id: [
-            { required: true, message: '请选择分类', trigger: 'change' }
+            { type:'number', required: true, message: '请选择分类', trigger: 'change' }
+          ],
+          cover: [
+            { required: true, message: '请上封面图片', trigger: 'blur' }
           ],
           intro: [
             { required: true, message: '请填写简介', trigger: 'blur' }

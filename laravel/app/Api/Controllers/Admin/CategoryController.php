@@ -27,12 +27,7 @@ class CategoryController extends AdminController
     }
 
     public function index(){
-        $category = $this->articleRepository->categoryModel->alls()->toArray();
-        foreach ($category as $key=>$value) {
-            $category[$key]['id'] = (string) $value['id'];
-        }
-
-        $category = $this->articleRepository->categoryModel->alls(['*'],['status'=>1]);
+        $category = $this->articleRepository->categoryModel->alls();
         return $this->getSuccess('success',['category'=>$category]);
     }
 }
