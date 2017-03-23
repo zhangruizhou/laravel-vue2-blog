@@ -39,6 +39,7 @@ $api->version('v1', function ($api) {
         $api->post('article', 'ArticleController@store');
         $api->put('article/{id}', 'ArticleController@update');
         $api->delete('article/{id}', 'ArticleController@delete');
+        $api->post('article/cover', 'ArticleController@cover');
         $api->get('category', 'CategoryController@index')->name('category');
         $api->post('upload', 'UploadController@image');
     });

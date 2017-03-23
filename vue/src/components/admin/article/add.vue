@@ -19,8 +19,9 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             :show-file-list="false">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <img v-if="ruleForm.cover" :src="ruleForm.cover" class="avatar" >
+            <i v-else class="el-icon-plus avatar-uploader-icon" ></i>
+            <el-input v-model="ruleForm.cover"  class="el-input__cover"></el-input>
           </el-upload>
         </el-form-item>
         <el-form-item label="所属分类" prop="category_id">
@@ -47,6 +48,11 @@
 
   </div>
 </template>
+<style>
+  .el-input__cover{
+    display: none;
+  }
+</style>
 <script>
   import { markdownEditor } from 'vue-simplemde';
   export default {
@@ -66,9 +72,6 @@
           category_id: [
             { type:'number', required: true, message: '请选择分类', trigger: 'change' }
           ],
-          cover: [
-            { required: true, message: '请上封面图片', trigger: 'blur' }
-          ],
           intro: [
             { required: true, message: '请填写简介', trigger: 'blur' }
           ],
@@ -77,7 +80,6 @@
           ],
         },
         category:[],
-        imageUrl: '',
         labelPosition: 'left',
         actionUrl: BACKENDAPIURL + 'upload',
       }
@@ -121,20 +123,9 @@
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
-      getArticle(){
-        const id = parseInt(this.$route.params.id);
-        if(id > 0) {
-          this.$http.get(BACKENDAPIURL + 'article/' + this.$route.params.id).then((response) => {
-            response = response.body
-            if (response.status === 1) {
-              this.ruleForm = response.data.article;
-            }
-          });
-        }
-      },
       handleAvatarSuccess(response, file) {
         if (response.status == 1) {
-          this.imageUrl = response.data.photo_url;
+          this.ruleForm.cover = response.data.photo_url;
         } else {
           this.$message.error(response.message);
         }

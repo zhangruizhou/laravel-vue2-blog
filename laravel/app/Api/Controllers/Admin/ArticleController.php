@@ -11,6 +11,7 @@ use App\Api\Controllers\AdminController;
 use App\Repositories\ArticleRepository;
 use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends AdminController {
 
@@ -34,7 +35,6 @@ class ArticleController extends AdminController {
 
     public function detail($id){
         $article = $this->articleRepository->articleModel->where(['id'=>$id])->first();
-        $article['category_id'] = (string) $article->category_id;
         return $this->getSuccess('success', ['article'=>$article]);
     }
 
@@ -43,6 +43,7 @@ class ArticleController extends AdminController {
         $rules = [
             'title' => 'required',
             'intro' => 'required',
+            'cover' => 'required',
             'content' => 'required',
         ];
         $data = $request->only('title','cover','category_id','intro','content');
@@ -50,11 +51,29 @@ class ArticleController extends AdminController {
         if ($validator->fails()) {
             return $this->getError($validator->errors()->first());
         }
-        $data['cover'] = 'a.jpg';
         $data['author'] = 'ruizhou';
         $data['user_id'] = 1;
         $articleId = $this->articleRepository->create($data);
         return $articleId > 0 ? $this->getSuccess('success',['id'=>$articleId]) : $this->getError('添加文章失败，请稍后再试');
+    }
+
+    public function cover(Request $request){
+        $rules = [
+            'photo' => 'max:2048|mimes:jpg,jpeg,png,gif',
+        ];
+        $data = $request->only('cover');
+        $validator = Validator::make($data, $rules);
+        if ($validator->fails()) {
+            return $this->getError($validator->errors()->first());
+        }
+        $file = $request->file('cover');
+        $filename = 'uploads/' . date("Ymd") . '/' . md5(time()) . '.' . $file->getClientOriginalExtension();
+        $res = Storage::disk('qiniu')->writeStream($filename, fopen($file->getRealPath(),'r'));
+        if ($res != 1) {
+            return $this->getError('上传图片失败!');
+        }
+        $fileUrl = '//'.config('filesystems.disks.qiniu.domain') . '/' . $filename . '-indexthumb';
+        return $this->getSuccess('success',['photo_url'=>$fileUrl]);
     }
 
     public function update($id){
